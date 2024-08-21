@@ -19,5 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "HackWearGlobo"
+rootProject.name = "HackdayGloboplayWear"
 include(":app")
+ 
