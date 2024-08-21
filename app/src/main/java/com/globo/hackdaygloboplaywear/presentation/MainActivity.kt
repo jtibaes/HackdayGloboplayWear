@@ -6,10 +6,14 @@
 
 package com.globo.hackdaygloboplaywear.presentation
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings.Global.getString
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,6 +25,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TimeText
@@ -28,6 +35,17 @@ import com.globo.hackdaygloboplaywear.R
 import com.globo.hackdaygloboplaywear.presentation.theme.HackdayGloboplayWearTheme
 
 class MainActivity : ComponentActivity() {
+
+    val NOTIFICATION_ID: Int = 1
+    val NOTIFICATION_ID_SECOND: Int = 2
+    val NOTIFICATION_ID_THIRD: Int = 3
+    val NOTIFICATION_ID_FOURTH: Int = 4
+    val NOTIFICATION_ID_GROUP: Int = 777
+    val EXTRA_VOICE_REPLY: String = "extra_voice_reply"
+    val EXTRA_VOICE_REPLY_CHOICE: String = "extra_voice_reply_choice"
+    val GROUP_KEY_EMIALS: String = "group_key_emails"
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
 
@@ -35,10 +53,19 @@ class MainActivity : ComponentActivity() {
 
         setTheme(android.R.style.Theme_DeviceDefault)
 
+        builder.build()
         setContent {
-            WearApp("Android")
+            WearApp("Rebeca Andrade")
         }
     }
+
+    var builder = NotificationCompat.Builder(this, "chanelId")
+        // .setSmallIcon(R.drawable.notification_icon)
+        .setContentTitle("")
+        .setContentText("cdfd")
+        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+
 }
 
 @Composable
