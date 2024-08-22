@@ -6,10 +6,12 @@
 
 package com.globo.hackdaygloboplaywear.presentation
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Bundle
+import android.service.notification.StatusBarNotification
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -43,19 +45,48 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var messageClient: MessageClient
 
+    val CHANNEL_ID = "CHANNEL_ID"
+    val CHANNEL_NAME = "CHANNEL_NAME"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        messageClient = Wearable.getMessageClient(this)
+       // messageClient = Wearable.getMessageClient(this)
 
         setTheme(android.R.style.Theme_DeviceDefault)
-        createNotificationChannel(this)
-        showNotification(this)
+      //  createNotificationChannel(this)
+       // showNotification(this)
 
-        builder.build()
+       // builder.build()
+
+        notification()
+
         setContent {
             WearApp()
         }
+    }
+
+    private fun notification() {
+        val notificationManager: NotificationManager =
+            getSystemService(NOTIFICATION_SERVICE) as (NotificationManager)
+        val notification = Notification.Builder(this)
+            //.setLargeIcon(largeIcon)
+            .setSmallIcon(R.drawable.ic_flag_placeholder)
+            .setContentText("Hello Samsung!")
+            .setChannelId(CHANNEL_ID)
+            .build()
+
+        notificationManager.createNotificationChannel(
+            NotificationChannel(
+                CHANNEL_ID,
+                CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+        )
+
+        notificationManager.notify(100, notification)
+
+
     }
 
     var builder = NotificationCompat.Builder(this, "chanelId")
