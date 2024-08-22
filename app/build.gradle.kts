@@ -69,4 +69,7 @@ dependencies {
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
     implementation("androidx.wear:wear:1.2.0")
+
+    debugImplementation(libs.coil)
+    debugImplementation(libs.coil.compose)
 }
