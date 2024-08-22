@@ -7,17 +7,15 @@
 package com.globo.hackdaygloboplaywear.presentation
 
 import android.Manifest
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
-import android.content.pm.PackageManager
-import android.os.Build
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
-import android.service.notification.StatusBarNotification
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -36,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.app.NotificationCompat
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.ui.tooling.preview.WearPreviewLargeRound
 import androidx.wear.compose.ui.tooling.preview.WearPreviewSmallRound
@@ -46,10 +43,10 @@ import com.globo.hackdaygloboplaywear.presentation.components.DrawOdd
 import com.globo.hackdaygloboplaywear.presentation.components.TeamOdd
 import com.globo.hackdaygloboplaywear.presentation.theme.HackdayGloboplayWearTheme
 import com.google.android.gms.wearable.MessageClient
-import com.google.android.gms.wearable.Wearable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
 
 class MainActivity : ComponentActivity() {
 
@@ -59,31 +56,37 @@ class MainActivity : ComponentActivity() {
     val CHANNEL_NAME = "CHANNEL_NAME"
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
 
-       // messageClient = Wearable.getMessageClient(this)
-
         setTheme(android.R.style.Theme_DeviceDefault)
-      //  createNotificationChannel(this)
-       // showNotification(this)
-
-       // builder.build()
-
-        notification()
 
         setContent {
             WearApp()
         }
+
+        createChannel(this)
+        askNotificationPermission(this)
+        notification()
     }
 
     private fun notification() {
+
+        val intent = Intent(this, MainActivity::class.java)
+
+        val pendingIntent =
+            PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+
+
         val notificationManager: NotificationManager =
             getSystemService(NOTIFICATION_SERVICE) as (NotificationManager)
         val notification = Notification.Builder(this)
             //.setLargeIcon(largeIcon)
             .setSmallIcon(R.drawable.ic_flag_placeholder)
-            .setContentText("Hello Samsung!")
+            .setContentTitle("My Notification")
+            .setContentText("Acompanhe o FLA x FLU")
             .setChannelId(CHANNEL_ID)
+            .setContentIntent(pendingIntent)
             .build()
 
         notificationManager.createNotificationChannel(
@@ -96,14 +99,8 @@ class MainActivity : ComponentActivity() {
 
         notificationManager.notify(100, notification)
 
-
     }
 
-    var builder = NotificationCompat.Builder(this, "chanelId")
-        // .setSmallIcon(R.drawable.notification_icon)
-        .setContentTitle("TESTE")
-        .setContentText("cdfd")
-        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
     private fun sendMessageToPhone() {
         CoroutineScope(Dispatchers.IO).launch {
@@ -118,31 +115,6 @@ class MainActivity : ComponentActivity() {
                 // Handle exception
             }
         }
-
-        createChannel(this)
-        askNotificationPermission(this)
-    }
-
-    private fun createNotificationChannel(context: Context) {
-        val channelId = "your_channel_id"
-        val channelName = "Your Channel Name"
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val channel = NotificationChannel(channelId, channelName, importance)
-        val notificationManager = context.getSystemService(NotificationManager::class.java)
-        notificationManager.createNotificationChannel(channel)
-    }
-
-    private fun showNotification(context: Context) {
-        val notificationId = 1
-
-        val notificationBuilder = NotificationCompat.Builder(context, "your_channel_id")
-            .setSmallIcon(R.drawable.splash_icon) // Replace with your icon
-            .setContentTitle("Notification Title")
-            .setContentText("Notification content goes here.")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-        // Show the notification
-        val notificationManager = context.getSystemService(NotificationManager::class.java)
-        notificationManager.notify(notificationId, notificationBuilder.build())
     }
 }
 
@@ -215,11 +187,18 @@ private fun askNotificationPermission(activity: ComponentActivity) {
 
     // This is only necessary for API level >= 33 (TIRAMISU)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        if (ContextCompat.checkSelfPermission(activity.applicationContext, Manifest.permission.POST_NOTIFICATIONS) ==
+        if (ContextCompat.checkSelfPermission(
+                activity.applicationContext,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) ==
             PackageManager.PERMISSION_GRANTED
         ) {
             // FCM SDK (and your app) can post notifications.
-        } else if (shouldShowRequestPermissionRationale(activity, Manifest.permission.POST_NOTIFICATIONS)) {
+        } else if (shouldShowRequestPermissionRationale(
+                activity,
+                Manifest.permission.POST_NOTIFICATIONS
+            )
+        ) {
             // TODO: display an educational UI explaining to the user the features that will be enabled
             //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
             //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
