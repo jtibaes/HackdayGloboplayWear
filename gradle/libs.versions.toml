@@ -14,7 +14,6 @@ horologistTiles = "0.4.8"
 watchfaceComplicationsDataSourceKtx = "1.1.1"
 wearVersion = "1.2.0"
 material3Android = "1.2.1"
-watchfaceComplicationsDataSourceKtx = "1.2.1"
 coil = "2.7.0"
 
 [libraries]
