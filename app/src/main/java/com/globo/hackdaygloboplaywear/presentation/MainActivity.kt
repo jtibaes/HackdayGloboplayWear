@@ -18,14 +18,22 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -53,7 +61,7 @@ class MainActivity : ComponentActivity() {
         setTheme(android.R.style.Theme_DeviceDefault)
 
         setContent {
-            WearApp("Android")
+            WearApp()
         }
 
         createChannel(this)
@@ -62,25 +70,49 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun WearApp(greetingName: String) {
+fun WearApp() {
     HackdayGloboplayWearTheme {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colors.background)
-                .padding(bottom = 8.dp)
+                .background(Color(0xFFc9470c))
+                .padding(bottom = 8.dp, top = 24.dp)
         ) {
-            Image(
-                modifier = Modifier.fillMaxSize(),
-                painter = painterResource(id = R.drawable.ic_betano),
-                contentDescription = null,
-                contentScale = ContentScale.FillBounds
-            )
+            Row(
+                modifier = Modifier
+                    .background(
+                        color = Color(0xFF2d3745),
+                        shape = RoundedCornerShape(size = 36.dp)
+                    )
+                    .padding(horizontal = 4.dp, vertical = 4.dp)
+                    .align(Alignment.TopCenter),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(RoundedCornerShape(24.dp)),
+                    painter = painterResource(id = R.drawable.ic_logo_globoplay),
+                    contentDescription = null,
+                    contentScale = ContentScale.Fit
+                )
+
+                Spacer(modifier = Modifier.width(16.dp))
+                Image(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(RoundedCornerShape(24.dp)),
+                    painter = painterResource(id = R.drawable.ic_betano),
+                    contentDescription = null,
+                    contentScale = ContentScale.FillBounds
+                )
+            }
 
             Row(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(bottom = 8.dp),
+                    .padding(bottom = 24.dp),
                 verticalAlignment = Alignment.Bottom
             ) {
                 TeamOdd(
@@ -150,5 +182,5 @@ private fun askNotificationPermission(activity: ComponentActivity) {
 @WearPreviewSquare
 @Composable
 fun DefaultPreview() {
-    WearApp("Preview Android")
+    WearApp()
 }

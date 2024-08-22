@@ -24,7 +24,7 @@ fun TeamOdd(
             flagSize = flagSize
         )
 
-        Spacer(modifier = Modifier.height(2.dp))
+        Spacer(modifier = Modifier.height(6.dp))
 
         Odd(oddValue = odd)
     }
