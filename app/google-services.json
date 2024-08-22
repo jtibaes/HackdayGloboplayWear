@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "718734103269",
+    "project_id": "hackday-gplay-wear",
+    "storage_bucket": "hackday-gplay-wear.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:718734103269:android:f0aff152cbb1c221d0ba0c",
+        "android_client_info": {
+          "package_name": "com.globo.hackdaygloboplaywear"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHctbhESnOwlBGIIkmrNt4NgzInYiiYgs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
