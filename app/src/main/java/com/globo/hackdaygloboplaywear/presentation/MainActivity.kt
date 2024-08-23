@@ -60,7 +60,7 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
 
-        setTheme(android.R.style.Theme_DeviceDefault)
+//        setTheme(android.R.style.Theme_DeviceDefault)
 
         setContent {
             WearApp()
