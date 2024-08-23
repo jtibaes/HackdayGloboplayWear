@@ -24,26 +24,26 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.Text
 import androidx.wear.compose.ui.tooling.preview.WearPreviewLargeRound
 import androidx.wear.compose.ui.tooling.preview.WearPreviewSmallRound
 import androidx.wear.compose.ui.tooling.preview.WearPreviewSquare
@@ -51,6 +51,8 @@ import com.globo.hackdaygloboplaywear.R
 import com.globo.hackdaygloboplaywear.presentation.components.DrawOdd
 import com.globo.hackdaygloboplaywear.presentation.components.TeamOdd
 import com.globo.hackdaygloboplaywear.presentation.theme.HackdayGloboplayWearTheme
+import com.google.firebase.messaging.FirebaseMessaging
+import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,6 +66,7 @@ class MainActivity : ComponentActivity() {
             WearApp()
         }
 
+        FirebaseMessaging.getInstance().subscribeToTopic("fitness_updates");
         createChannel(this)
         askNotificationPermission(this)
     }
@@ -72,41 +75,71 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun WearApp() {
     HackdayGloboplayWearTheme {
+        val random by remember {
+            mutableStateOf(Random(0.1.toLong()))
+        }
+        val randomFla by remember(random) {
+            mutableDoubleStateOf(random.nextDouble(0.4, 0.7))
+        }
+        val randomFlu by remember(random) {
+            mutableDoubleStateOf(random.nextDouble(0.9, 1.2))
+        }
+        val randomDraw by remember(random) {
+            mutableDoubleStateOf(random.nextDouble(0.8, 1.0))
+        }
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFFc9470c))
-                .padding(bottom = 8.dp, top = 24.dp)
         ) {
-            Row(
-                modifier = Modifier
-                    .background(
-                        color = Color(0xFF2d3745),
-                        shape = RoundedCornerShape(size = 36.dp)
-                    )
-                    .padding(horizontal = 4.dp, vertical = 4.dp)
-                    .align(Alignment.TopCenter),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            Box(modifier = Modifier.fillMaxSize()) {
                 Image(
-                    modifier = Modifier
-                        .size(48.dp)
-                        .clip(RoundedCornerShape(24.dp)),
-                    painter = painterResource(id = R.drawable.ic_logo_globoplay),
-                    contentDescription = null,
-                    contentScale = ContentScale.Fit
-                )
-
-                Spacer(modifier = Modifier.width(16.dp))
-                Image(
-                    modifier = Modifier
-                        .size(48.dp)
-                        .clip(RoundedCornerShape(24.dp)),
-                    painter = painterResource(id = R.drawable.ic_betano),
+                    painter = painterResource(id = R.drawable.bg_flamengo),
                     contentDescription = null,
                     contentScale = ContentScale.FillBounds
                 )
+                Image(
+                    painter = painterResource(id = R.drawable.bg_betano),
+                    contentDescription = null,
+                    contentScale = ContentScale.FillBounds
+                )
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 24.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .background(
+                            color = Color(0xFF2d3745),
+                            shape = RoundedCornerShape(size = 36.dp)
+                        )
+                        .padding(horizontal = 4.dp, vertical = 4.dp)
+                        .align(Alignment.TopCenter),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        modifier = Modifier
+                            .size(48.dp)
+                            .clip(RoundedCornerShape(24.dp)),
+                        painter = painterResource(id = R.drawable.ic_logo_globoplay),
+                        contentDescription = null,
+                        contentScale = ContentScale.Fit
+                    )
+
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Image(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(RoundedCornerShape(16.dp)),
+                        painter = painterResource(id = R.drawable.ic_betano),
+                        contentDescription = null,
+                        contentScale = ContentScale.FillBounds
+                    )
+                }
             }
 
             Row(
@@ -118,20 +151,21 @@ fun WearApp() {
                 TeamOdd(
                     teamName = "FLA",
                     teamFlag = "https://media.api-sports.io/football/teams/127.png",
-                    odd = 1.5f,
+                    odd = randomFla,
                 )
 
-                DrawOdd(odd = 0.3f)
+                DrawOdd(odd = randomDraw)
 
                 TeamOdd(
                     teamName = "FLU",
                     teamFlag = "https://media.api-sports.io/football/teams/124.png",
-                    odd = 0.8f,
+                    odd = randomFlu,
                 )
             }
         }
     }
 }
+
 
 private fun createChannel(context: Context) {
     // Create channel to show notifications.
@@ -161,11 +195,18 @@ private fun askNotificationPermission(activity: ComponentActivity) {
 
     // This is only necessary for API level >= 33 (TIRAMISU)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        if (ContextCompat.checkSelfPermission(activity.applicationContext, Manifest.permission.POST_NOTIFICATIONS) ==
+        if (ContextCompat.checkSelfPermission(
+                activity.applicationContext,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) ==
             PackageManager.PERMISSION_GRANTED
         ) {
             // FCM SDK (and your app) can post notifications.
-        } else if (shouldShowRequestPermissionRationale(activity, Manifest.permission.POST_NOTIFICATIONS)) {
+        } else if (shouldShowRequestPermissionRationale(
+                activity,
+                Manifest.permission.POST_NOTIFICATIONS
+            )
+        ) {
             // TODO: display an educational UI explaining to the user the features that will be enabled
             //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
             //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.

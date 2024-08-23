@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 fun TeamOdd(
     teamName: String,
     teamFlag: String,
-    odd: Float,
+    odd: Double,
     flagSize: Dp = 48.dp
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -33,5 +33,5 @@ fun TeamOdd(
 @Preview
 @Composable
 fun TeamOddPreview() {
-    TeamOdd(teamName = "COR", teamFlag = "", odd = 0.82f)
+    TeamOdd(teamName = "COR", teamFlag = "", odd = 0.82)
 }

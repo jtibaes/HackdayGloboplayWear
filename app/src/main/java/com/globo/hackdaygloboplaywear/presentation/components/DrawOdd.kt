@@ -16,7 +16,7 @@ import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 
 @Composable
-fun DrawOdd(odd: Float) {
+fun DrawOdd(odd: Double) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -38,5 +38,5 @@ fun DrawOdd(odd: Float) {
 @Preview
 @Composable
 fun DrawOddPreview() {
-    DrawOdd(odd = 0.4f)
+    DrawOdd(odd = 0.4)
 }

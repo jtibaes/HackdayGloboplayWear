@@ -25,6 +25,14 @@ class FCMService : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
+        Log.w("FCMService", "=======================")
+        Log.w("FCMService", "=======================")
+        Log.w("FCMService", "=======================")
+        Log.w("FCMService", "message $message")
+        Log.w("FCMService", "=======================")
+        Log.w("FCMService", "=======================")
+        Log.w("FCMService", "=======================")
+
         // Extract message data
         val title = message.data["title"]
         val body = message.data["body"]

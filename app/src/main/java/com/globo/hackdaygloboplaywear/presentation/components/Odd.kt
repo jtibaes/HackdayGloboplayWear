@@ -19,7 +19,7 @@ import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 
 @Composable
-fun Odd(oddValue: Float) {
+fun Odd(oddValue: Double) {
     Row(
         modifier = Modifier
             .background(
@@ -30,7 +30,7 @@ fun Odd(oddValue: Float) {
         horizontalArrangement = Arrangement.Center
     ) {
         Text(
-            text = oddValue.toString(),
+            text = oddValue.format(2),
             style = TextStyle(
                 fontSize = MaterialTheme.typography.caption2.fontSize,
                 color = Color(0xFFa2c774)
@@ -43,8 +43,10 @@ fun Odd(oddValue: Float) {
 @Composable
 fun OddPreview() {
     Column {
-        Odd(1.32f)
+        Odd(1.32)
         Spacer(modifier = Modifier.height(8.dp))
-        Odd(0.3f)
+        Odd(0.3)
     }
 }
+
+fun Double.format(digits: Int) = "%.${digits}f".format(this)
